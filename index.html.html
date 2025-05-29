@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find My Device</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
+<body>
+  <h1>📍 Find My Device</h1>
+
+  <div id="map"></div>
+
+  <div class="controls">
+    <button onclick="getLocation()">Lacak Lokasi</button>
+    <button onclick="toggleCamera()">Akses Kamera</button>
+  </div>
+
+  <video id="camera" autoplay playsinline></video>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
