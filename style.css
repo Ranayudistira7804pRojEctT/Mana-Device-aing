@@ -1,3 +1,14 @@
+/* Style yang aku kasih tadi */
+body {
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  background: #f9f9f9;
+  color: #333;
+}
+
+/* Tambahan style baru kamu */
 body {
   font-family: sans-serif;
   text-align: center;
@@ -13,6 +24,7 @@ h1 {
   margin: 0;
 }
 
+/* ...dan seterusnya untuk #map, .controls, button, #camera ... */
 #map {
   height: 400px;
   width: 90%;
