@@ -5,13 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Find My Device</title>
   <link rel="stylesheet" href="style.css" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin: 15px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #accountList {
+      list-style: none;
+      padding: 0;
+    }
+    #accountList li {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
   <h1>Mana Device aing👥</h1>
+
+  <!-- 🔍 Kolom Pencarian Akun -->
+  <input type="text" id="searchInput" placeholder="Cari akun/email...">
+  <ul id="accountList">
+    <li><strong>ranayudistira46@gmail.com</strong> - Smartphone</li>
+    <li><strong>user2@example.com</strong> - Tablet</li>
+    <li><strong>nana@example.com</strong> - Laptop</li>
+  </ul>
 
   <div id="map"></div>
 
@@ -24,5 +50,19 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
+  <script>
+    // 🔍 Fitur Pencarian Akun
+    const searchInput = document.getElementById('searchInput');
+    const accountList = document.getElementById('accountList');
+    const accounts = accountList.getElementsByTagName('li');
+
+    searchInput.addEventListener('keyup', function() {
+      const filter = this.value.toLowerCase();
+      for (let i = 0; i < accounts.length; i++) {
+        const text = accounts[i].textContent.toLowerCase();
+        accounts[i].style.display = text.includes(filter) ? '' : 'none';
+      }
+    });
+  </script>
 </body>
 </html>
