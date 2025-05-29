@@ -4,9 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Find My Device</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
     #searchInput {
       width: 100%;
       padding: 10px;
@@ -18,6 +26,9 @@
     #accountList {
       list-style: none;
       padding: 0;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 20px;
     }
     #accountList li {
       background: #fff;
@@ -25,6 +36,41 @@
       margin-bottom: 8px;
       border-radius: 5px;
       box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    }
+    #map {
+      height: 300px;
+      width: 100%;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #camera {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      display: block;
     }
   </style>
 </head>
@@ -48,7 +94,6 @@
   <video id="camera" autoplay playsinline></video>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="script.js"></script>
   <script>
     // 🔍 Fitur Pencarian Akun
     const searchInput = document.getElementById('searchInput');
@@ -62,6 +107,53 @@
         accounts[i].style.display = text.includes(filter) ? '' : 'none';
       }
     });
+
+    // Inisialisasi peta
+    let map;
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        alert("Geolocation tidak didukung browser ini.");
+      }
+    }
+
+    function showPosition(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      if (!map) {
+        map = L.map('map').setView([lat, lon], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+      } else {
+        map.setView([lat, lon], 15);
+      }
+      L.marker([lat, lon]).addTo(map).bindPopup("Lokasi kamu sekarang").openPopup();
+    }
+
+    function showError(error) {
+      alert("Gagal mendapatkan lokasi: " + error.message);
+    }
+
+    // Toggle kamera depan
+    let stream;
+    async function toggleCamera() {
+      const video = document.getElementById("camera");
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+        video.style.display = "none";
+      } else {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+          video.srcObject = stream;
+          video.style.display = "block";
+        } catch (err) {
+          alert("Gagal mengakses kamera: " + err.message);
+        }
+      }
+    }
   </script>
 </body>
 </html>
